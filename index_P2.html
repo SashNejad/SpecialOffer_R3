@@ -109,7 +109,7 @@ src="https://www.facebook.com/tr?id=3907175546258255&ev=PageView&noscript=1"
     <div class="mark">✓</div>
     <h2>Assessment received</h2>
     <p>Taking you to Sash's calendar to book your free 15-minute call…</p>
-    <a href="index_P3.html">Open the calendar</a>
+    <a id="calFallback" href="index_P3.html">Open the calendar</a>
   </div>
 
   <footer>
@@ -118,26 +118,77 @@ src="https://www.facebook.com/tr?id=3907175546258255&ev=PageView&noscript=1"
 
 <script async src="https://tally.so/widgets/embed.js"></script>
 <script>
-  // When the embedded Tally form is submitted:
-  // 1) fire the Meta "Lead" event  2) show confirmation  3) go to the booking page
-  window.addEventListener("message", function (e) {
-    var isSubmit = false;
+  // On Tally form submit:
+  // 1) fire the Meta "Lead" event
+  // 2) pull the name + email out of the submitted answers
+  // 3) redirect to the booking page with ?name=&email= so cal.com prefills them
+  //    (page 3's embed has forwardQueryParams enabled, so the params flow through)
+
+  function extractContact(payload) {
+    var out = { name: "", email: "" };
     try {
-      if (typeof e.data === "string" && e.data.indexOf("Tally.FormSubmitted") > -1) {
+      var fields = (payload && (payload.fields || payload.answers)) || [];
+      for (var i = 0; i < fields.length; i++) {
+        var f = fields[i] || {};
+        var label = String(f.title || f.label || f.question || "").toLowerCase();
+        var val = "";
+        if (f.answer && typeof f.answer === "object" && "value" in f.answer) val = f.answer.value;
+        else if ("value" in f) val = f.value;
+        else if (typeof f.answer === "string") val = f.answer;
+        if (val == null) val = "";
+        val = String(val).trim();
+        if (!val) continue;
+        if (!out.email && (label.indexOf("email") > -1 || (f.type && String(f.type).toLowerCase().indexOf("email") > -1))) {
+          out.email = val;
+        } else if (!out.name && label.indexOf("name") > -1 && label.indexOf("whatsapp") === -1) {
+          out.name = val;
+        }
+      }
+      // Fallback: detect an email-shaped answer even if the label didn't match
+      if (!out.email) {
+        for (var j = 0; j < fields.length; j++) {
+          var g = fields[j] || {};
+          var v2 = (g.answer && g.answer.value) || g.value || "";
+          if (typeof v2 === "string" && /.+@.+\..+/.test(v2)) { out.email = v2.trim(); break; }
+        }
+      }
+    } catch (err) { /* prefill is best-effort; booking works without it */ }
+    return out;
+  }
+
+  function buildBookingUrl(contact) {
+    var url = "index_P3.html";
+    var params = [];
+    if (contact.name)  params.push("name="  + encodeURIComponent(contact.name));
+    if (contact.email) params.push("email=" + encodeURIComponent(contact.email));
+    return params.length ? url + "?" + params.join("&") : url;
+  }
+
+  window.addEventListener("message", function (e) {
+    var data = e.data, payload = null, isSubmit = false;
+    try {
+      if (typeof data === "string" && data.indexOf("Tally.FormSubmitted") > -1) {
         isSubmit = true;
-      } else if (e.data && e.data.event === "Tally.FormSubmitted") {
+        try { var parsed = JSON.parse(data); payload = parsed && parsed.payload; } catch (err) {}
+      } else if (data && data.event === "Tally.FormSubmitted") {
         isSubmit = true;
+        payload = data.payload;
       }
     } catch (err) { /* ignore unrelated messages */ }
 
     if (!isSubmit) return;
 
+    // 1) Meta Lead event (guarded for ad blockers)
     try { if (typeof fbq === "function") fbq("track", "Lead"); } catch (err) {}
 
-    document.getElementById("done").classList.add("show");
+    // 2) Build the prefilled booking URL and point the fallback button at it too
+    var bookingUrl = buildBookingUrl(extractContact(payload));
+    var fb = document.getElementById("calFallback");
+    if (fb) fb.href = bookingUrl;
 
-    // Short pause so the pixel request completes before navigation
-    setTimeout(function () { window.location.href = "index_P3.html"; }, 1200);
+    // 3) Confirmation, then redirect (pause lets the pixel request complete)
+    document.getElementById("done").classList.add("show");
+    setTimeout(function () { window.location.href = bookingUrl; }, 1200);
   });
 </script>
 </body>
