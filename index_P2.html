@@ -173,22 +173,29 @@ src="https://www.facebook.com/tr?id=3907175546258255&ev=PageView&noscript=1"
     return params.length ? url + "?" + params.join("&") : url;
   }
 
-  window.addEventListener("message", function (e) {
-    var data = e.data, payload = null, isSubmit = false;
-    try {
-      if (typeof data === "string" && data.indexOf("Tally.FormSubmitted") > -1) {
-        isSubmit = true;
-        try { var parsed = JSON.parse(data); payload = parsed && parsed.payload; } catch (err) {}
-      } else if (data && data.event === "Tally.FormSubmitted") {
-        isSubmit = true;
-        payload = data.payload;
-      }
-    } catch (err) { /* ignore unrelated messages */ }
+ var _leadFired = false;
 
-    if (!isSubmit) return;
+window.addEventListener("message", function (e) {
+  var data = e.data, payload = null, isSubmit = false;
+  try {
+    if (typeof data === "string" && data.indexOf("Tally.FormSubmitted") > -1) {
+      isSubmit = true;
+      try { var parsed = JSON.parse(data); payload = parsed && parsed.payload; } catch (err) {}
+    } else if (data && data.event === "Tally.FormSubmitted") {
+      isSubmit = true;
+      payload = data.payload;
+    }
+  } catch (err) { /* ignore unrelated messages */ }
 
-    // 1) Meta Lead event (guarded for ad blockers)
-    try { if (typeof fbq === "function") fbq("track", "Lead"); } catch (err) {}
+  if (!isSubmit) return;
+
+  // Guard: only fire once per page load, even if Tally sends the
+  // "FormSubmitted" message more than once for the same submission
+  if (_leadFired) return;
+  _leadFired = true;
+
+  // 1) Meta Lead event (guarded for ad blockers)
+  try { if (typeof fbq === "function") fbq("track", "Lead"); } catch (err) {}
 
     // 2) Build the prefilled booking URL and point the fallback button at it too
     var bookingUrl = buildBookingUrl(extractContact(payload));
