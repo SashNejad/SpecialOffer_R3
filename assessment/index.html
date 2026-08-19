@@ -194,8 +194,15 @@ window.addEventListener("message", function (e) {
   if (_leadFired) return;
   _leadFired = true;
 
-  // 1) Meta Lead event (guarded for ad blockers)
+ // 1) Conversion events (guarded for ad blockers)
   try { if (typeof fbq === "function") fbq("track", "Lead"); } catch (err) {}
+  try {
+    if (typeof gtag === "function") {
+      gtag('event', 'generate_lead');
+      gtag('event', 'conversion', {'send_to': 'AW-18391822714/bOPlCOCytuQcEPri88FE'});
+    }
+  } catch (err) {}
+
 
     // 2) Build the prefilled booking URL and point the fallback button at it too
     var bookingUrl = buildBookingUrl(extractContact(payload));
