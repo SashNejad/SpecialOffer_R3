@@ -102,7 +102,8 @@ src="https://www.facebook.com/tr?id=3907175546258255&ev=PageView&noscript=1"
   .creds{border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:var(--card);padding:28px 0}
   .creds .label{font-size:11.5px;font-weight:700;letter-spacing:2.2px;text-transform:uppercase;color:var(--mut);text-align:center}
   .creds .logos{margin-top:18px;display:flex;justify-content:center}
-  .creds .logos img{width:100%;height:auto;opacity:.8;filter:grayscale(100%);transition:opacity .2s ease,filter .2s ease}
+  /* Half-width so the logos read as a credential strip, not a banner */
+  .creds .logos img{width:100%;max-width:540px;height:auto;opacity:.8;filter:grayscale(100%);transition:opacity .2s ease,filter .2s ease}
   .creds .logos img:hover{opacity:1;filter:grayscale(0)}
 
   /* ---------- what you get ---------- */
