@@ -439,6 +439,29 @@ h3 { font-weight: 600; font-size: 20px; }
   .stats ul { grid-template-columns: minmax(0, 1fr); }
   .stats li:nth-child(n+2) { border-left: 0; border-top: 1px solid var(--line); }
 }
+
+/* ===== Two plans ===== */
+.plans { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; align-items: stretch; }
+.tier { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: clamp(24px, 3.5vw, 40px); display: flex; flex-direction: column; gap: 22px; min-width: 0; }
+.tier--full { background: var(--primary); border-color: var(--primary); color: #FFFFFF; box-shadow: var(--shadow); }
+.tier__top { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; }
+.tier__badge { font-size: 12px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; background: var(--accent); color: var(--ink); padding: 4px 10px; border-radius: 999px; margin-bottom: 4px; }
+.tier h3 { font-size: 24px; }
+.tier__sub { color: var(--body); }
+.tier--full .tier__sub { color: var(--on-primary); }
+.tier__price { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px; }
+.tier__price b { font-family: var(--display); font-weight: 700; font-size: clamp(48px, 6vw, 68px); line-height: 1; letter-spacing: -.03em; }
+.tier__price span { font-size: 17px; color: var(--muted); }
+.tier--full .tier__price span { color: var(--on-primary); }
+.tier .includes { flex: 1; }
+.tier .btn { align-self: flex-start; }
+.tier--full .includes i { background: var(--accent); color: var(--ink); }
+.includes li.is-no { color: var(--muted); }
+.includes li.is-no i { background: var(--line); color: var(--muted); }
+.bonus { margin-top: 24px; background: var(--accent-tint); border: 1px solid var(--accent); border-radius: 12px; padding: 16px 20px; display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 14px; }
+.bonus b { font-size: 13px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--accent-deep); }
+.addons--plans { margin-top: 24px; max-width: 520px; }
+@media (max-width: 860px) { .plans { grid-template-columns: minmax(0, 1fr); } }
 </style>
 </head>
 <body>
@@ -473,7 +496,7 @@ h3 { font-weight: 600; font-size: 20px; }
         <p class="hero__lead">Coaching for people with full-time jobs who are starting strength training. Your first session is in person, at your own gym. After that, I coach you online.</p>
         <div class="hero__cta" id="hero-cta">
           <a class="btn btn--accent" href="assessment/" data-cta="hero">Take the 2-minute assessment <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
-          <a class="hero__more" href="#plan">See an example plan</a>
+          <a class="hero__more" href="#pricing">See plans and pricing</a>
         </div>
         <span class="hero__note">Then pick a time for a free 15-minute call. No pressure, no commitment.</span>
       </div>
@@ -593,35 +616,6 @@ h3 { font-weight: 600; font-size: 20px; }
     </div>
   </section>
 
-  <section class="sec sec--ink" id="plan">
-    <div class="wrap picker">
-      <div class="picker__copy">
-        <span class="eyebrow">Try it</span>
-        <h2>A plan for the gym you actually have.</h2>
-        <p>Pick what you have access to and see what a first session could look like.</p>
-        <div class="setups" role="group" aria-label="Your equipment">
-          <button class="setup" type="button" data-setup="condo" aria-pressed="true">Condo gym</button>
-          <button class="setup" type="button" data-setup="gym" aria-pressed="false">Full gym</button>
-          <button class="setup" type="button" data-setup="home" aria-pressed="false">Dumbbells at home</button>
-          <button class="setup" type="button" data-setup="body" aria-pressed="false">No equipment</button>
-        </div>
-      </div>
-      <!-- TODO: these four example sessions are illustrations. Replace them (in the script at the bottom too) with sessions you would actually give a beginner. -->
-      <div class="plan" id="plan-card" aria-live="polite">
-        <span class="plan__meta">Example · Day A · about 45 min</span>
-        <p class="plan__title" id="plan-title">Full body, in your building's gym</p>
-        <ol class="plan__list" id="plan-list">
-          <li style="--i:1"><span class="plan__n">1</span><span class="plan__ex">Goblet squat</span><span class="plan__sets">3 × 10</span></li>
-          <li style="--i:2"><span class="plan__n">2</span><span class="plan__ex">Dumbbell bench press</span><span class="plan__sets">3 × 10</span></li>
-          <li style="--i:3"><span class="plan__n">3</span><span class="plan__ex">Seated cable row</span><span class="plan__sets">3 × 12</span></li>
-          <li style="--i:4"><span class="plan__n">4</span><span class="plan__ex">Dumbbell Romanian deadlift</span><span class="plan__sets">3 × 10</span></li>
-          <li style="--i:5"><span class="plan__n">5</span><span class="plan__ex">Plank</span><span class="plan__sets">3 × 30 s</span></li>
-        </ol>
-        <p class="plan__note">An example only. Your own plan is written for you after the first call.</p>
-      </div>
-    </div>
-  </section>
-
   <section class="sec" id="start">
     <div class="wrap">
       <div class="head">
@@ -642,37 +636,34 @@ h3 { font-weight: 600; font-size: 20px; }
         <li class="step step--inperson">
           <span class="step__tag">In person</span>
           <h3>First session at your gym</h3>
-          <p>Once you sign up, we meet at your gym and go through your plan together. Outside Montreal, we do this by video.</p>
+          <p>With full coaching, we meet at your gym and go through your plan together. Outside Montreal, we do this by video.</p>
         </li>
         <li class="step">
           <span class="step__tag">Online</span>
           <h3>Train on your own schedule</h3>
-          <p>You follow the plan when it suits you. I check in every week and I am on WhatsApp in between.</p>
+          <p>You follow the plan when it suits you. With full coaching, I check in every week and I am on WhatsApp in between.</p>
         </li>
       </ol>
     </div>
   </section>
 
+
   <section class="sec sec--white" id="pricing">
     <div class="wrap">
-      <div class="price">
-        <div class="price__main">
-          <span class="eyebrow">One package · one price</span>
-          <h2>Online Coaching</h2>
-          <!-- TODO: state the currency (for example "$390 CAD"). -->
-          <p class="price__amount"><b>$390</b><span>per month</span></p>
-          <p class="price__term">Month to month.</p>
-
-          <!-- 3-MONTH BONUS: delete this block to remove the offer. -->
-          <div class="founding">
-            <b>Commit to 3 months</b>
-            <p>Your <strong>custom meal plan is included</strong> at no extra cost (normally +$80).</p>
+      <div class="head">
+        <span class="eyebrow">Pricing</span>
+        <h2>Choose your plan</h2>
+        <p>Both plans are month to month.</p>
+      </div>
+      <!-- TODO: state the currency (for example "$249 CAD" and "$129 CAD"). -->
+      <div class="plans">
+        <div class="tier tier--full">
+          <div class="tier__top">
+            <span class="tier__badge">Recommended</span>
+            <h3>Full coaching</h3>
+            <p class="tier__sub">Your plan, your coach, and a first session together.</p>
           </div>
-          <!-- END 3-MONTH BONUS -->
-
-          <a class="btn btn--accent" href="assessment/" data-cta="pricing">Start with the free assessment <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
-        </div>
-        <div class="price__side">
+          <p class="tier__price"><b>$249</b><span>per month</span></p>
           <ul class="includes">
             <li><i><svg aria-hidden="true" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></i><span>First session in person at your gym in Montreal, or by video elsewhere</span></li>
             <li><i><svg aria-hidden="true" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></i><span>Personalized workout program for your equipment and schedule</span></li>
@@ -680,12 +671,33 @@ h3 { font-weight: 600; font-size: 20px; }
             <li><i><svg aria-hidden="true" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></i><span>WhatsApp support and form checks, with replies within 24 hours</span></li>
             <li><i><svg aria-hidden="true" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></i><span>Nutrition guidance matched to your goal</span></li>
           </ul>
-          <div class="addons">
-            <span class="eyebrow">Optional add-ons</span>
-            <div><span>Custom meal plan</span><span>+$80</span></div>
-            <div><span>Extra in-person training session</span><span>+$105</span></div>
-          </div>
+          <a class="btn btn--accent" href="assessment/" data-cta="pricing-full">Take the free assessment <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
         </div>
+        <div class="tier">
+          <div class="tier__top">
+            <h3>Workout plan</h3>
+            <p class="tier__sub">A personalized program to follow on your own.</p>
+          </div>
+          <p class="tier__price"><b>$129</b><span>per month</span></p>
+          <ul class="includes">
+            <li><i><svg aria-hidden="true" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></i><span>Personalized workout program for your equipment and schedule</span></li>
+            <li><i><svg aria-hidden="true" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></i><span>Built from your assessment and our call</span></li>
+            <li><i><svg aria-hidden="true" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></i><span>Train on your own schedule</span></li>
+            <li class="is-no"><i><svg aria-hidden="true" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round"><path d="M7 7l10 10M17 7L7 17"/></svg></i><span>No 1-on-1 session</span></li>
+            <li class="is-no"><i><svg aria-hidden="true" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round"><path d="M7 7l10 10M17 7L7 17"/></svg></i><span>No weekly check-ins</span></li>
+          </ul>
+          <a class="btn btn--primary" href="assessment/" data-cta="pricing-workout">Take the free assessment <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        </div>
+      </div>
+
+      <!-- 3-MONTH BONUS: delete this block to remove the offer. -->
+      <p class="bonus"><b>Commit to 3 months</b><span>On either plan, your custom meal plan is included at no extra cost (normally +$110).</span></p>
+      <!-- END 3-MONTH BONUS -->
+
+      <div class="addons addons--plans">
+        <span class="eyebrow">Optional add-ons</span>
+        <div><span>Custom meal plan</span><span>+$110</span></div>
+        <div><span>Extra in-person training session</span><span>+$105</span></div>
       </div>
     </div>
   </section>
@@ -720,8 +732,12 @@ h3 { font-weight: 600; font-size: 20px; }
           <p>It depends on where you start. Many clients notice more energy and confidence in the first weeks. Physical change builds over the following months of consistent training.</p>
         </details>
         <details>
+          <summary>What is the difference between the two plans? <i><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></i></summary>
+          <p>Both give you a personalized workout program. Full coaching adds a first session in person at your gym and a weekly check-in, so I adjust the plan with you as you go. The workout plan is the program on its own, to follow by yourself.</p>
+        </details>
+        <details>
           <summary>What is the commitment? <i><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></i></summary>
-          <p>The call is free, with no obligation. Coaching is month to month. If you commit to 3 months, your custom meal plan is included at no extra cost, and 3 months is a realistic time to learn the movements and build the habit.</p>
+          <p>The call is free, with no obligation. Both plans are month to month. If you commit to 3 months on either plan, your custom meal plan is included at no extra cost, and 3 months is a realistic time to learn the movements and build the habit.</p>
         </details>
       </div>
     </div>
@@ -758,39 +774,6 @@ h3 { font-weight: 600; font-size: 20px; }
 
 <script>
 (function () {
-  // Example sessions for the equipment picker. Replace with your own.
-  var plans = {
-    condo: { title: "Full body, in your building's gym", items: [["Goblet squat", "3 × 10"], ["Dumbbell bench press", "3 × 10"], ["Seated cable row", "3 × 12"], ["Dumbbell Romanian deadlift", "3 × 10"], ["Plank", "3 × 30 s"]] },
-    gym:   { title: "Full body, on the machines", items: [["Leg press", "3 × 10"], ["Machine chest press", "3 × 10"], ["Lat pulldown", "3 × 12"], ["Dumbbell Romanian deadlift", "3 × 10"], ["Dead bug", "3 × 8"]] },
-    home:  { title: "Full body, with two dumbbells", items: [["Goblet squat", "3 × 10"], ["Dumbbell floor press", "3 × 10"], ["One-arm dumbbell row", "3 × 10"], ["Dumbbell Romanian deadlift", "3 × 10"], ["Side plank", "3 × 20 s"]] },
-    body:  { title: "Full body, no equipment", items: [["Chair squat", "3 × 12"], ["Incline push-up", "3 × 8"], ["Glute bridge", "3 × 12"], ["Reverse lunge", "3 × 8"], ["Plank", "3 × 30 s"]] }
-  };
-  var card = document.getElementById('plan-card');
-  var list = document.getElementById('plan-list');
-  var title = document.getElementById('plan-title');
-  var buttons = document.querySelectorAll('.setup');
-
-  function span(cls, text) { var s = document.createElement('span'); s.className = cls; s.textContent = text; return s; }
-  function show(key) {
-    var plan = plans[key];
-    if (!plan) return;
-    title.textContent = plan.title;
-    list.textContent = '';
-    plan.items.forEach(function (item, i) {
-      var li = document.createElement('li');
-      li.style.setProperty('--i', i + 1);
-      li.appendChild(span('plan__n', String(i + 1)));
-      li.appendChild(span('plan__ex', item[0]));
-      li.appendChild(span('plan__sets', item[1]));
-      list.appendChild(li);
-    });
-    buttons.forEach(function (b) { b.setAttribute('aria-pressed', String(b.dataset.setup === key)); });
-    card.classList.remove('is-swap');
-    void card.offsetWidth;
-    card.classList.add('is-swap');
-  }
-  buttons.forEach(function (b) { b.addEventListener('click', function () { show(b.dataset.setup); }); });
-
   if ('IntersectionObserver' in window) {
     // Phone: show the bottom bar once the hero button has scrolled away.
     var bar = document.getElementById('bar');
