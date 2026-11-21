@@ -564,7 +564,20 @@ h3 { font-weight: 600; font-size: 20px; }
 .menu a::after { content: "→"; opacity: .5; }
 .menu a:hover, .menu a[aria-current] { color: var(--accent); }
 @media (max-width: 560px) {
+  /* Phones: keep "Certified personal trainer" under the name, as on desktop; drop " · Montreal" to make room. */
   .top .wrap { gap: 10px; }
-  .top .brand span { display: none; }
+  .top .brand b { font-size: 18px; }
+  .top .brand span { display: block; font-size: 12px; }
+  .top .brand .brand__city { display: none; }
   .top__cta { padding: 0 14px; font-size: 14px; }
+}
+@media (max-width: 374px) {
+  /* Smallest phones: tighter spacing so the name, title and button still fit on one row. */
+  .top .wrap { gap: 8px; }
+  .top .brand span { font-size: 11.5px; }
+  .top__cta { padding: 0 11px; font-size: 13px; }
+}
+/* Touch screens have no hover, so show the gym logos in full colour there. */
+@media (hover: none) {
+  .creds img { opacity: 1; filter: none; }
 }
