@@ -196,15 +196,12 @@ fbq('track', 'PageView');
   <div class="wrap">
     <button class="menu-btn" type="button" aria-expanded="false" aria-controls="site-menu" aria-label="Open menu">
       <span class="menu-btn__bars" aria-hidden="true"><span></span><span></span><span></span></span>
-      <span class="menu-btn__label">Menu</span>
     </button>
     <a class="brand" href="/"><b>Sash Nejad</b><span>Certified personal trainer · Montreal</span></a>
     <a class="btn btn--accent top__cta" href="/assessment/" data-cta="header">Book a free call</a>
   </div>
   <nav class="menu" id="site-menu" aria-label="Main" hidden>
     <ul>
-      <li><a href="/#pricing">Pricing</a></li>
-      <li><a href="/#faq">Q&amp;A</a></li>
       <li><a href="/calculators/" aria-current="true">Calculators</a></li>
       <li><a href="/blog/">Blog</a></li>
       <li><a href="/contact/">Contact</a></li>
@@ -235,7 +232,7 @@ fbq('track', 'PageView');
         </div>
       </fieldset>
           <div class="row2">
-            <div class="field"><label for="lift">Weight lifted (<span data-u="w">kg</span>)</label><input id="lift" type="number" inputmode="decimal" min="1" step="0.5" value="60"></div>
+            <div class="field"><label for="lift">Weight lifted (<span data-u="w">kg</span>)</label><input id="lift" type="number" inputmode="decimal" min="1" step="1" value="60"></div>
             <div class="field">
               <label for="reps">Reps completed</label>
               <select id="reps">
@@ -372,7 +369,7 @@ fbq('track', 'PageView');
   }
   function convertWeight(id, to) {
     var w = val(id);
-    if (isFinite(w)) $(id).value = Math.round((to === 'imperial' ? w * 2.20462 : w / 2.20462) * 10) / 10;
+    if (isFinite(w)) $(id).value = Math.round(to === 'imperial' ? w * 2.20462 : w / 2.20462);
   }
   form.addEventListener('submit', function (e) { e.preventDefault(); });
   var last = picked('units');
