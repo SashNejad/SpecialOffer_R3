@@ -552,7 +552,13 @@ h3 { font-weight: 600; font-size: 20px; }
 .menu-btn[aria-expanded="true"] .menu-btn__bars span:nth-child(3) { top: 6px; transform: rotate(-45deg); }
 .menu { position: absolute; left: 0; right: 0; top: 100%; background: var(--primary); border-top: 1px solid var(--ink-line);
   box-shadow: 0 24px 40px -20px rgba(0, 0, 0, .55); padding-block: 8px 20px; padding-inline: clamp(20px, 5vw, 48px); }
-.menu ul { max-width: 1160px; margin-inline: auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 0 24px; }
+.menu ul { max-width: 1160px; margin-inline: auto; display: grid; grid-template-columns: minmax(0, 1fr); }
+.menu li:last-child a { border-bottom: 0; }
+@media (min-width: 561px) {
+  /* On wider screens the menu is a narrow panel that drops down under the button, lined up with the page edge. */
+  .menu { left: max(clamp(20px, 5vw, 48px), calc((100% - 1160px) / 2)); right: auto; width: 300px; top: calc(100% - 6px);
+    padding: 6px 20px 10px; border: 1px solid var(--ink-line); border-radius: 12px; }
+}
 .menu a { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 2px;
   border-bottom: 1px solid var(--ink-line); color: #FFFFFF; text-decoration: none; font-size: 18px; font-weight: 600; }
 .menu a::after { content: "→"; opacity: .5; }
