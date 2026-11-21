@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0B1F3A">
 
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-15GEWQ8VV3"></script>
@@ -275,7 +276,7 @@ fbq('track', 'PageView');
 }
 </script>
 </head>
-<body class="has-bar">
+<body>
 <!-- Google Tag Manager (noscript) -->
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TTW9QDB4" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- End Google Tag Manager (noscript) -->
@@ -285,16 +286,22 @@ fbq('track', 'PageView');
 
 <header class="top">
   <div class="wrap">
+    <button class="menu-btn" type="button" aria-expanded="false" aria-controls="site-menu" aria-label="Open menu">
+      <span class="menu-btn__bars" aria-hidden="true"><span></span><span></span><span></span></span>
+      <span class="menu-btn__label">Menu</span>
+    </button>
     <a class="brand" href="/"><b>Sash Nejad</b><span>Certified personal trainer · Montreal</span></a>
-    <nav class="nav" aria-label="Main">
-      <a href="/#pricing">Pricing</a>
-      <a href="/#faq">Q&amp;A</a>
-      <a href="/calculators/">Calculators</a>
-      <a href="/blog/">Blog</a>
-      <a href="/contact/">Contact</a>
-    </nav>
-    <a class="btn btn--ghost" href="/assessment/" data-cta="header">Book a free call</a>
+    <a class="btn btn--accent top__cta" href="/assessment/" data-cta="header">Book a free call</a>
   </div>
+  <nav class="menu" id="site-menu" aria-label="Main" hidden>
+    <ul>
+      <li><a href="/#pricing">Pricing</a></li>
+      <li><a href="/#faq">Q&amp;A</a></li>
+      <li><a href="/calculators/">Calculators</a></li>
+      <li><a href="/blog/">Blog</a></li>
+      <li><a href="/contact/">Contact</a></li>
+    </ul>
+  </nav>
 </header>
 
 <main id="main">
@@ -551,11 +558,6 @@ fbq('track', 'PageView');
 
 </main>
 
-<div class="bar" id="bar">
-  <div><b>Free 15-minute call</b><span>No commitment</span></div>
-  <a class="btn btn--primary" href="/assessment/" data-cta="sticky">Take the assessment</a>
-</div>
-
 <footer class="foot">
   <div class="wrap">
     <span>© 2026 Sash Nejad Coaching · Montreal, QC</span>
@@ -571,15 +573,25 @@ fbq('track', 'PageView');
 </footer>
 <script>
 (function () {
-  // Phone: show the bottom booking bar once the hero button has scrolled away.
-  var bar = document.getElementById('bar');
-  var heroCta = document.getElementById('hero-cta');
-  if (bar && heroCta && 'IntersectionObserver' in window) {
-    new IntersectionObserver(function (entries) {
-      bar.classList.toggle('is-on', !entries[0].isIntersecting);
-    }).observe(heroCta);
+  // Menu button: opens and closes the page menu under the header.
+  var btn = document.querySelector('.menu-btn');
+  var menu = document.getElementById('site-menu');
+  if (!btn || !menu) return;
+  function set(open) {
+    btn.setAttribute('aria-expanded', String(open));
+    btn.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+    menu.hidden = !open;
   }
+  btn.addEventListener('click', function () { set(menu.hidden); });
+  menu.addEventListener('click', function (e) { if (e.target.closest('a')) set(false); });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && !menu.hidden) { set(false); btn.focus(); }
+  });
+  document.addEventListener('click', function (e) {
+    if (!menu.hidden && !e.target.closest('.top')) set(false);
+  });
 })();
 </script>
+
 </body>
 </html>
