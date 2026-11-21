@@ -1,0 +1,7 @@
+# Sash Nejad Coaching
+# Every crawler is welcome, including search engines and AI answer engines
+# (for example Googlebot, Bingbot, OAI-SearchBot, PerplexityBot and ClaudeBot).
+User-agent: *
+Allow: /
+
+Sitemap: https://sashnejad.com/sitemap.xml
