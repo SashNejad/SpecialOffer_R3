@@ -531,7 +531,10 @@ h3 { font-weight: 600; font-size: 20px; }
 .field input:focus-visible, .field select:focus-visible, .seg input:focus-visible + span { outline-color: var(--accent-deep); }
 
 /* Sticky header on every screen size: menu button, name, and "Book a free call" on the right */
-.top { position: sticky; top: 0; z-index: 50; }
+/* Fixed rather than sticky: some phone browsers (notably iPhone Safari) can let a sticky header scroll away.
+   The header is always 72px tall (44px button + 14px padding top and bottom), so the page starts 72px lower. */
+.top { position: fixed; top: 0; left: 0; right: 0; z-index: 50; }
+.top + main { padding-top: 72px; }
 .top .wrap { flex-wrap: nowrap; justify-content: flex-start; gap: 12px 16px; }
 .top .brand { margin-right: auto; min-width: 0; }
 .top .brand b, .top .brand span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -563,6 +566,10 @@ h3 { font-weight: 600; font-size: 20px; }
   border-bottom: 1px solid var(--ink-line); color: #FFFFFF; text-decoration: none; font-size: 18px; font-weight: 600; }
 .menu a::after { content: "→"; opacity: .5; }
 .menu a:hover, .menu a[aria-current] { color: var(--accent); }
+/* Language link: last item in the menu, quieter than the page links. */
+.menu a.menu__lang { font-size: 16px; font-weight: 500; color: var(--on-primary); }
+.menu a.menu__lang::after { content: "↔"; }
+.menu a.menu__lang:hover { color: var(--accent); }
 @media (max-width: 560px) {
   /* Phones: keep "Certified personal trainer" under the name, as on desktop; drop " · Montreal" to make room. */
   .top .wrap { gap: 10px; }
@@ -577,6 +584,8 @@ h3 { font-weight: 600; font-size: 20px; }
   .top .brand span { font-size: 11.5px; }
   .top__cta { padding: 0 11px; font-size: 13px; }
 }
+/* French pages: small note under the testimonials heading ("translated from English"). */
+.note-tr { margin-top: 8px; font-size: 14px; color: var(--muted); }
 /* Touch screens have no hover, so show the gym logos in full colour there. */
 @media (hover: none) {
   .creds img { opacity: 1; filter: none; }
